@@ -5,7 +5,7 @@ name = "spring-boot-app"
 experimental = false
 
 [build]
-  builder = "railway/railway-builder:latest"
+#  builder = "railway/railway-builder:latest"
 
 [env]
   PORT = 8081
