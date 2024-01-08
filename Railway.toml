@@ -1,0 +1,11 @@
+# Railway.toml
+
+# Example for a Java Spring Boot application
+name = "spring-boot-app"
+experimental = false
+
+[build]
+  builder = "railway/railway-builder:latest"
+
+[env]
+  PORT = 8081
