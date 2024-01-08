@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="back-voiture:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>back-voiture</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="back-voiture.war">
+      <element id="artifact" artifact-name="back-voiture:war exploded" />
+    </root>
+  </artifact>
+</component>
