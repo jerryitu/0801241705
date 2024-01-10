@@ -50,7 +50,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             String password;
             ObjectMapper mapper = new ObjectMapper();
             Credentials credential = mapper.readValue(request.getInputStream(),Credentials.class);
-
+            log.info("Miditra");
             username = credential.getUsername();
             password = credential.getPassword();
             if(username == null || username.trim().equals("") || !FonctionUtils.isStringSafe(username)){
@@ -101,6 +101,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             Map<String, Object> tokens = new HashMap<>();
             List<String> roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
             long currentTimeMillis = System.currentTimeMillis();
+
             tokens.put("access_token", jwtGenerator.generateMainToken(request, currentTimeMillis, user.getUsername(), roles));
             response.setContentType(APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), tokens);
