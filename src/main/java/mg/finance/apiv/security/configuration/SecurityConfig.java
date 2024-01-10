@@ -59,8 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("OPTIONS","POST"));
-        configuration.setAllowedHeaders(Arrays.asList("Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList("Origin", "Accept", "X-Requested-With", "Content-Type", "Authorization", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
         configuration.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin","Access-Control-Allow-Credentials"));
 
         CorsConfiguration configuration1 = new CorsConfiguration();
@@ -70,8 +70,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         configuration1.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin","Access-Control-Allow-Credentials"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/login", configuration); // OPTIONS et POST method uniquement
-        source.registerCorsConfiguration("/annonce**", configuration1); // OPTIONS et GET method uniquement
+        source.registerCorsConfiguration("/**", configuration);
+//        source.registerCorsConfiguration("/login", configuration); // OPTIONS et POST method uniquement
+//        source.registerCorsConfiguration("/annonce**", configuration1); // OPTIONS et GET method uniquement
         return source;
     }
 
