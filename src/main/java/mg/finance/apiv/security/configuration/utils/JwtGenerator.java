@@ -18,15 +18,15 @@ public class JwtGenerator {
 
     public String generateMainToken(HttpServletRequest request, Long currentMillis, String username, List<String> roles){
         Algorithm algorithm = Algorithm.HMAC256(this.secret.getBytes());
-        String issuerServer = request.getServerName().equals("127.0.0.1") ?
-                "http://" + request.getServerName() + ":8081/login"
-                :
-                "http://" + request.getServerName() + "/api-solde/login";
+//        String issuerServer = request.getServerName().equals("127.0.0.1") ?
+//                "http://" + request.getServerName() + ":8081/login"
+//                :
+//                "http://" + request.getServerName() + "/api-solde/login";
         //String[] audience = {"rohi"};
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(new Date(currentMillis + this.duration))
-                .withIssuer(issuerServer)
+                //.withIssuer(issuerServer)
                // .withAudience(audience)
                 .withClaim("roles", roles)
 //                .withClaim("publicKey", randomKey)
@@ -35,18 +35,18 @@ public class JwtGenerator {
 
     public void isTokenContentSafe(HttpServletRequest request, String token) throws Exception {
         DecodedJWT decodedTokenNonVerified = JWT.decode(token);
-        String issuer = decodedTokenNonVerified.getIssuer();
-        List<String> audience = decodedTokenNonVerified.getAudience();
+//        String issuer = decodedTokenNonVerified.getIssuer();
+//        List<String> audience = decodedTokenNonVerified.getAudience();
 
      //   if(audience == null || audience.size() != 1 || !audience.contains("rohi"))  throw new Exception("Token invalide");
 
         String decodedTokenNonVerifiedAlgorithm = decodedTokenNonVerified.getAlgorithm();
         if(!decodedTokenNonVerifiedAlgorithm.equals("HS256")) throw new Exception("Token invalide");
 
-        String issuerServer = request.getServerName().equals("127.0.0.1") ?
-                "http://" + request.getServerName() + ":8081/login"
-                :
-                "http://" + request.getServerName() + "/api-solde/login";
-        if(issuer == null || !issuer.equals(issuerServer)) throw new Exception("Token invalide");
+//        String issuerServer = request.getServerName().equals("127.0.0.1") ?
+//                "http://" + request.getServerName() + ":8081/login"
+//                :
+//                "http://" + request.getServerName() + "/api-solde/login";
+//        if(issuer == null || !issuer.equals(issuerServer)) throw new Exception("Token invalide");
     }
 }

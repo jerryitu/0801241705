@@ -40,7 +40,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
+        log.info("Miditra");
+        System.out.println("Miditra");
         //JSON authentication
         if(HttpMethod.OPTIONS.matches(request.getMethod())){
             return null;
@@ -50,6 +51,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             String password;
             ObjectMapper mapper = new ObjectMapper();
             Credentials credential = mapper.readValue(request.getInputStream(),Credentials.class);
+            System.out.println("Miditra");
             username = credential.getUsername();
             password = credential.getPassword();
             if(username == null || username.trim().equals("") || !FonctionUtils.isStringSafe(username)){
@@ -74,6 +76,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
                     Authentication authenticate = authenticationManager.authenticate(authenticationToken);
                     if(utilisateurByUsername.getTentativeConnexion()!=0) utilisateurAPIService.reinitialiserTentativeConnexion(utilisateurByUsername.getId());
+                    System.out.println("Miditra OK");
                     return authenticate;
                 }catch (Exception e){
                     if((utilisateurByUsername.getTentativeConnexion()+1) < 5){
@@ -100,9 +103,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             Map<String, Object> tokens = new HashMap<>();
             List<String> roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
             long currentTimeMillis = System.currentTimeMillis();
-
+            System.out.println("Generate token");
             tokens.put("access_token", jwtGenerator.generateMainToken(request, currentTimeMillis, user.getUsername(), roles));
             response.setContentType(APPLICATION_JSON_VALUE);
+            System.out.println("Token OK");
             new ObjectMapper().writeValue(response.getOutputStream(), tokens);
         }catch (Exception e){
             e.printStackTrace();
