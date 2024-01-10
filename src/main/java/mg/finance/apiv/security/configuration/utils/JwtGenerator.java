@@ -21,13 +21,13 @@ public class JwtGenerator {
         String issuerServer = request.getServerName().equals("127.0.0.1") ?
                 "http://" + request.getServerName() + ":8081/login"
                 :
-                "http://" + request.getServerName() + ":" + request.getServerPort() + "/api-solde/login";
-        String[] audience = {"rohi"};
+                "http://" + request.getServerName() + "/api-solde/login";
+        //String[] audience = {"rohi"};
         return JWT.create()
                 .withSubject(username)
                 .withExpiresAt(new Date(currentMillis + this.duration))
                 .withIssuer(issuerServer)
-                .withAudience(audience)
+               // .withAudience(audience)
                 .withClaim("roles", roles)
 //                .withClaim("publicKey", randomKey)
                 .sign(algorithm);
@@ -38,7 +38,7 @@ public class JwtGenerator {
         String issuer = decodedTokenNonVerified.getIssuer();
         List<String> audience = decodedTokenNonVerified.getAudience();
 
-        if(audience == null || audience.size() != 1 || !audience.contains("rohi"))  throw new Exception("Token invalide");
+     //   if(audience == null || audience.size() != 1 || !audience.contains("rohi"))  throw new Exception("Token invalide");
 
         String decodedTokenNonVerifiedAlgorithm = decodedTokenNonVerified.getAlgorithm();
         if(!decodedTokenNonVerifiedAlgorithm.equals("HS256")) throw new Exception("Token invalide");
@@ -46,7 +46,7 @@ public class JwtGenerator {
         String issuerServer = request.getServerName().equals("127.0.0.1") ?
                 "http://" + request.getServerName() + ":8081/login"
                 :
-                "http://" + request.getServerName() + ":" + request.getServerPort() + "/api-solde/login";
+                "http://" + request.getServerName() + "/api-solde/login";
         if(issuer == null || !issuer.equals(issuerServer)) throw new Exception("Token invalide");
     }
 }

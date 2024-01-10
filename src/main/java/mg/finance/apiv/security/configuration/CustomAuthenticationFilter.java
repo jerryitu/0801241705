@@ -50,7 +50,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             String password;
             ObjectMapper mapper = new ObjectMapper();
             Credentials credential = mapper.readValue(request.getInputStream(),Credentials.class);
-            log.info("Miditra");
             username = credential.getUsername();
             password = credential.getPassword();
             if(username == null || username.trim().equals("") || !FonctionUtils.isStringSafe(username)){
