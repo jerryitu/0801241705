@@ -40,8 +40,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        log.info("Miditra");
-        System.out.println("Miditra");
+        System.out.println("Miditra"+request.getMethod());
         //JSON authentication
         if(HttpMethod.OPTIONS.matches(request.getMethod())){
             return null;
