@@ -19,6 +19,11 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ApiVApplication {
 	private final Environment environment;
+
+	public static void main(String[] args) {
+		SpringApplication.run(ApiVApplication.class, args);
+	}
+
 	@Bean
 	public JwtGenerator jwtGenerator(){
 		return new JwtGenerator(environment.getProperty("jwt.secret"), Long.valueOf(Objects.requireNonNull(environment.getProperty("jwt.duration"))));
@@ -27,9 +32,7 @@ public class ApiVApplication {
 	BCryptPasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
 	}
-	public static void main(String[] args) {
-		SpringApplication.run(ApiVApplication.class, args);
-	}
+
 
 	@Bean
 	CommandLineRunner run(UtilisateurAPIService utilisateurAPIService) {

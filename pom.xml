@@ -11,7 +11,7 @@
 	<groupId>mg.finance</groupId>
 	<artifactId>back-voiture</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>Back</name>
 	<description>back</description>
 	<properties>
@@ -80,8 +80,12 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<mainClass>mg.finance.apiv.ApiVApplication</mainClass>
+					<layout>JAR</layout>
+
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 
