@@ -29,7 +29,6 @@ public class UtilisateurAPIController {
     private JwtGenerator jwtGenerator;
 
     @PostMapping("/save")
-    @PreAuthorize("hasAuthority('AJOUTER_UTILISATEUR')")
     public ResponseEntity<?> saveUtilisateur(@RequestBody UtilisateurAPI utilisateur){
         try{
             URI uri= URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/utilisateur/save").toUriString());

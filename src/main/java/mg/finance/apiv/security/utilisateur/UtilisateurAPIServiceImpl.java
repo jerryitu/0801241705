@@ -111,22 +111,24 @@ public class UtilisateurAPIServiceImpl implements UtilisateurAPIService, UserDet
     public UtilisateurAPI saveUtilisateur(UtilisateurAPI utilisateur) throws Exception {
         log.info("Enregistrement d'un nouvel utilisateur API {} dans la base" , utilisateur.getUsername());
         UtilisateurAPI activeUser = this.getActiveUser();
-//        if (utilisateur.getPasswordFront() != null) utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPasswordFront()));
+        if (utilisateur.getPasswordFront() != null) utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPasswordFront()));
         //Mot de passe aléatoire
  //       String generatedPassword = "123456789";
 //        String generatedPassword = RandomPassword.getAlphaNumericString(10);
-        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
+        log.info("Password {}", utilisateur.getPasswordFront());
+        //utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
 
         utilisateur.setDateCreation(LocalDateTime.now());
         utilisateur.setIsActive(true);
         utilisateur.setGeneratedPassword(utilisateur.getPassword());
-
-        // Enregistrement de l'utilisateur
-        UtilisateurAPI utilisateurSaved = utilisateurAPIRepo.save(utilisateur);
         // Role par defaut ROLE_USER
         String roleToSave = utilisateur.getRoleFront() != null ? (utilisateur.getRoleFront().startsWith("ROLE_") ? utilisateur.getRoleFront() : "ROLE_USER") : "ROLE_USER";
+        RoleAPI role = roleAPIRepo.findByNom(roleToSave);
+        utilisateur.setRole(role);
+        // Enregistrement de l'utilisateur
+        UtilisateurAPI utilisateurSaved = utilisateurAPIRepo.save(utilisateur);
 
-        return addRoleToUtilisateur(utilisateurSaved.getUsername(), roleToSave);
+        return utilisateurSaved;
     }
 
     @Override
