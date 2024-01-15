@@ -5,6 +5,7 @@ import mg.finance.apiv.annonce.AnnonceService;
 import mg.finance.apiv.annonce.carburant.Carburant;
 import mg.finance.apiv.annonce.voiture.Voiture;
 import mg.finance.apiv.annonce.voiture.VoitureRepo;
+import mg.finance.apiv.security.utilisateur.entity.UtilisateurAPI;
 import mg.finance.utils.ErrorResponse;
 import mg.finance.utils.FonctionUtils;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/annonce")
@@ -48,5 +50,23 @@ public class AnnonceController {
             }
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("Erreur de véhicule"));
+    }
+    @GetMapping("/valider/{id}")
+    public ResponseEntity<?> valider(@PathVariable("id") String idAnnonce){
+        try{
+            System.out.println(idAnnonce);
+            Optional<Annonce> annonceOptional = annonceRepo.findById(Integer.valueOf(idAnnonce));
+            if(!annonceOptional.isPresent()){
+                throw new Exception("L'annonce à valider est introuvable");
+            }
+            Annonce annonceUpdate = annonceOptional.get();
+            annonceUpdate.setEtatValidation("1");
+            annonceUpdate.setDateValidation(LocalDate.now());
+            annonceRepo.save(annonceUpdate);
+            return ResponseEntity.ok().body(annonceUpdate);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
     }
 }
