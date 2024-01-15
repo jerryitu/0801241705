@@ -113,13 +113,13 @@ public class UtilisateurAPIServiceImpl implements UtilisateurAPIService, UserDet
         UtilisateurAPI activeUser = this.getActiveUser();
 //        if (utilisateur.getPasswordFront() != null) utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPasswordFront()));
         //Mot de passe aléatoire
-        String generatedPassword = "123456789";
+ //       String generatedPassword = "123456789";
 //        String generatedPassword = RandomPassword.getAlphaNumericString(10);
-        utilisateur.setPassword(passwordEncoder.encode(generatedPassword));
+        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
 
         utilisateur.setDateCreation(LocalDateTime.now());
         utilisateur.setIsActive(true);
-        utilisateur.setGeneratedPassword(generatedPassword);
+        utilisateur.setGeneratedPassword(utilisateur.getPassword());
 
         // Enregistrement de l'utilisateur
         UtilisateurAPI utilisateurSaved = utilisateurAPIRepo.save(utilisateur);
