@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/carburant")
 @RequiredArgsConstructor
@@ -28,7 +30,14 @@ public class CarburantController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Carburant carburant){
         try {
-            return ResponseEntity.ok().body(carburantRepo.save(carburant));
+            if(carburant.getId()!=null && !carburant.getId().equals("")) {
+                Optional<Carburant> carburantOptional = carburantRepo.findById(Integer.valueOf(carburant.getId()));
+                Carburant carburantUpdate = carburantOptional.get();
+                carburantUpdate.setNom(carburant.getNom());
+                return ResponseEntity.ok().body(carburantRepo.save(carburantUpdate));
+            } else {
+                return ResponseEntity.ok().body(carburantRepo.save(carburant));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));

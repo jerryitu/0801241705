@@ -49,7 +49,7 @@ public class Voiture {
     private Etat etat;
     private Double kilometrage;
     private Double puissance;
-    private Double annee;
+    private Integer annee;
     private Integer portes;
     private Integer sieges;
 }

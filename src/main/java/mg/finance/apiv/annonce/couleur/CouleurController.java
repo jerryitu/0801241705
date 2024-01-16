@@ -1,6 +1,7 @@
 package mg.finance.apiv.annonce.couleur;
 
 import lombok.RequiredArgsConstructor;
+import mg.finance.apiv.annonce.couleur.Couleur;
 import mg.finance.apiv.annonce.etat.Etat;
 import mg.finance.apiv.annonce.etat.EtatDAO;
 import mg.finance.apiv.annonce.etat.EtatRepo;
@@ -8,6 +9,8 @@ import mg.finance.utils.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/couleur")
@@ -28,7 +31,14 @@ public class CouleurController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Couleur couleur){
         try {
-            return ResponseEntity.ok().body(couleurRepo.save(couleur));
+            if(couleur.getId()!=null && !couleur.getId().equals("")) {
+                Optional<Couleur> couleurOptional = couleurRepo.findById(Integer.valueOf(couleur.getId()));
+                Couleur couleurUpdate = couleurOptional.get();
+                couleurUpdate.setNom(couleur.getNom());
+                return ResponseEntity.ok().body(couleurRepo.save(couleurUpdate));
+            } else {
+                return ResponseEntity.ok().body(couleurRepo.save(couleur));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));

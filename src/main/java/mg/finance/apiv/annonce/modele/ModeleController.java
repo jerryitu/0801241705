@@ -1,12 +1,12 @@
 package mg.finance.apiv.annonce.modele;
 
 import lombok.RequiredArgsConstructor;
-import mg.finance.apiv.annonce.modele.Modele;
-import mg.finance.apiv.annonce.modele.ModeleDAO;
 import mg.finance.utils.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/modele")
@@ -27,7 +27,14 @@ public class ModeleController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Modele modele){
         try {
-            return ResponseEntity.ok().body(modeleRepo.save(modele));
+            if(modele.getId()!=null && !modele.getId().equals("")) {
+                Optional<Modele> modeleOptional = modeleRepo.findById(Integer.valueOf(modele.getId()));
+                Modele modeleUpdate = modeleOptional.get();
+                modeleUpdate.setNom(modele.getNom());
+                return ResponseEntity.ok().body(modeleRepo.save(modeleUpdate));
+            } else {
+                return ResponseEntity.ok().body(modeleRepo.save(modele));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));

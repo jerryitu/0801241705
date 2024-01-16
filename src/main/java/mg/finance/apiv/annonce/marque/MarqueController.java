@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/marque")
 @RequiredArgsConstructor
@@ -25,7 +27,14 @@ public class MarqueController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Marque marque){
         try {
-            return ResponseEntity.ok().body(marqueRepo.save(marque));
+            if(marque.getId()!=null && !marque.getId().equals("")) {
+                Optional<Marque> marqueOptional = marqueRepo.findById(Integer.valueOf(marque.getId()));
+                Marque marqueUpdate = marqueOptional.get();
+                marqueUpdate.setNom(marque.getNom());
+                return ResponseEntity.ok().body(marqueRepo.save(marqueUpdate));
+            } else {
+                return ResponseEntity.ok().body(marqueRepo.save(marque));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));

@@ -1,12 +1,14 @@
 package mg.finance.apiv.annonce.categorie;
 
 import lombok.RequiredArgsConstructor;
-import mg.finance.apiv.annonce.carburant.Carburant;
-import mg.finance.apiv.annonce.carburant.CarburantDAO;
+import mg.finance.apiv.annonce.categorie.Categorie;
+import mg.finance.apiv.annonce.categorie.CategorieDAO;
 import mg.finance.utils.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/categorie")
@@ -27,7 +29,14 @@ public class CategorieController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Categorie categorie){
         try {
-            return ResponseEntity.ok().body(categorieRepo.save(categorie));
+            if(categorie.getId()!=null && !categorie.getId().equals("")) {
+                Optional<Categorie> categorieOptional = categorieRepo.findById(Integer.valueOf(categorie.getId()));
+                Categorie categorieUpdate = categorieOptional.get();
+                categorieUpdate.setNom(categorie.getNom());
+                return ResponseEntity.ok().body(categorieRepo.save(categorieUpdate));
+            } else {
+                return ResponseEntity.ok().body(categorieRepo.save(categorie));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));

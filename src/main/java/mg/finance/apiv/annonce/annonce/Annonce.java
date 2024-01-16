@@ -1,13 +1,17 @@
 package mg.finance.apiv.annonce.annonce;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mg.finance.apiv.annonce.photo.Photo;
 import mg.finance.apiv.annonce.voiture.Voiture;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -31,4 +35,6 @@ public class Annonce {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dateValidation;
     private String etatVendu;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Photo> photo=new ArrayList<>();
 }
