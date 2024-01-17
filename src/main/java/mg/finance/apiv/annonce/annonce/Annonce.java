@@ -27,7 +27,7 @@ public class Annonce {
     private LocalDate dateAnnonce;
     @Column(name = "id_voiture")
     private Integer idVoiture;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_voiture", insertable = false, updatable = false)
     private Voiture voiture;
     private Long idUser;
@@ -35,6 +35,4 @@ public class Annonce {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dateValidation;
     private String etatVendu;
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Photo> photo=new ArrayList<>();
 }

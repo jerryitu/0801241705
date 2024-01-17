@@ -24,7 +24,7 @@ public class Vente {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_annonce", insertable = false, updatable = false)
     private Annonce annopnce;
-    private Integer idUserAcheteur;
+    private Long idUserAcheteur;
     private Double prixVente;
     private Double commission;
     private LocalDate dateVente;

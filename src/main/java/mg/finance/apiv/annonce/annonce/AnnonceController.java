@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/annonce")
@@ -33,7 +34,9 @@ public class AnnonceController {
     @GetMapping("/get-all")
     public ResponseEntity<?> getAll(){
         try{
-            return ResponseEntity.ok().body(annonceService.getAll());
+            return ResponseEntity.ok().body(annonceRepo.getAllRepo().stream()
+                    .distinct()
+                    .collect(Collectors.toList()));
         }catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
@@ -90,8 +93,8 @@ public class AnnonceController {
                 annonce.setIdUser(userConnected.getId());
                 annonce.setEtatValidation("0");
                 annonce.setEtatVendu("0");
-                System.out.println(annonce.getPhoto().size());
-                annonce.getPhoto().stream()
+                System.out.println(annonce.getVoiture().getPhoto().size());
+                annonce.getVoiture().getPhoto().stream()
                         .forEach(s -> {
                             s.setIdVoiture(annonce.getIdVoiture());
                             photoRepo.save(s);

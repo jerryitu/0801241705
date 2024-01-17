@@ -1,7 +1,11 @@
 package mg.finance.apiv.annonce.annonce;
 
-import mg.finance.apiv.annonce.carburant.Carburant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface AnnonceRepo extends JpaRepository<Annonce,Integer> {
+    @Query("select a from Annonce a join fetch a.voiture v join fetch v.categorie join fetch v.etat join fetch v.marque join fetch v.modele join fetch v.transmission left join fetch v.photo")
+    List<Annonce> getAllRepo();
 }

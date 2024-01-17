@@ -7,9 +7,12 @@ import mg.finance.apiv.annonce.categorie.Categorie;
 import mg.finance.apiv.annonce.etat.Etat;
 import mg.finance.apiv.annonce.marque.Marque;
 import mg.finance.apiv.annonce.modele.Modele;
+import mg.finance.apiv.annonce.photo.Photo;
 import mg.finance.apiv.annonce.transmission.Transmission;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -47,6 +50,9 @@ public class Voiture {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_etat", insertable = false, updatable = false)
     private Etat etat;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idVoiture", insertable = false, updatable = false)
+    private List<Photo> photo=new ArrayList<>();
     private Double kilometrage;
     private Double puissance;
     private Integer annee;
