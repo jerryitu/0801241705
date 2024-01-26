@@ -17,7 +17,7 @@ public class FavorisController {
     private final FavorisDAO favorisDAO;
     private final FavorisRepo favorisRepo;
     private final UtilisateurAPIService utilisateurAPIService;
-    @GetMapping("/get-mine")
+    @GetMapping("/mine")
     public ResponseEntity<?> getMine(){
         try{
             UtilisateurAPI userConnected = utilisateurAPIService.getActiveUser();

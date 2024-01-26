@@ -53,7 +53,7 @@ public class AnnonceController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
         }
     }
-    @GetMapping("/get-mine")
+    @GetMapping("/mine")
     public ResponseEntity<?> getMine(){
         try{
             UtilisateurAPI userConnected = utilisateurAPIService.getActiveUser();
