@@ -20,7 +20,7 @@ public class FonctionUtils {
 
     public static String traiterString(String texte){
         if(texte == null || texte.trim().equals("")) return "";
-        String texteTraite = texte.trim().toLowerCase();
+        String texteTraite = texte.trim(); //.toLowerCase();
         texteTraite = texteTraite.replaceAll(";","");
         texteTraite = texteTraite.replaceAll("=","");
         texteTraite = texteTraite.replaceAll("select ","");

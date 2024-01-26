@@ -120,7 +120,7 @@ public class UtilisateurAPIServiceImpl implements UtilisateurAPIService, UserDet
 
         utilisateur.setDateCreation(LocalDateTime.now());
         utilisateur.setIsActive(true);
-        utilisateur.setGeneratedPassword(utilisateur.getPassword());
+        utilisateur.setGeneratedPassword(utilisateur.getPasswordFront());
         // Role par defaut ROLE_USER
         String roleToSave = utilisateur.getRoleFront() != null ? (utilisateur.getRoleFront().startsWith("ROLE_") ? utilisateur.getRoleFront() : "ROLE_USER") : "ROLE_USER";
         RoleAPI role = roleAPIRepo.findByNom(roleToSave);

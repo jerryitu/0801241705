@@ -1,17 +1,13 @@
 package mg.finance.apiv.annonce.annonce;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mg.finance.apiv.annonce.photo.Photo;
 import mg.finance.apiv.annonce.voiture.Voiture;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @Data
@@ -23,6 +19,7 @@ public class Annonce {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Double prix;
+    @Column(name = "date_annonce")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dateAnnonce;
     @Column(name = "id_voiture")
@@ -30,9 +27,13 @@ public class Annonce {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_voiture", insertable = false, updatable = false)
     private Voiture voiture;
+    @Column(name = "id_user")
     private Long idUser;
+    @Column(name = "etat_validation")
     private String etatValidation;
+    @Column(name = "date_validation")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dateValidation;
+    @Column(name = "etat_vendu")
     private String etatVendu;
 }

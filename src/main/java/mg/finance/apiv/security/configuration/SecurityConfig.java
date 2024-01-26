@@ -49,6 +49,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers(HttpMethod.OPTIONS,"/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/login").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/annonce").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/carburant").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/categorie").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/couleur").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/etat").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/marque").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/modele").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/transmission").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST,"/annonce/get-by-filter").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/**").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/**").authenticated();
         http.addFilter(customAuthenticationFilter);

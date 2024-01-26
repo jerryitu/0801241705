@@ -13,6 +13,16 @@ import org.springframework.web.bind.annotation.*;
 public class EtatController {
     private final EtatDAO etatDAO;
     private final EtatRepo etatRepo;
+    @GetMapping("")
+    //@PreAuthorize("hasAuthority('GET_AGENT_BY_MATRICULE')")
+    public ResponseEntity<?> getAll1(){
+        try{
+            return ResponseEntity.ok().body(etatDAO.getAll());
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
     @GetMapping("/get-all")
     //@PreAuthorize("hasAuthority('GET_AGENT_BY_MATRICULE')")
     public ResponseEntity<?> getAll(){
@@ -26,6 +36,16 @@ public class EtatController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Etat etat){
+        try {
+            System.out.println(etat.getNom());
+            return ResponseEntity.ok().body(etatRepo.save(etat));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+    @PostMapping("")
+    public ResponseEntity<?> save1(@RequestBody Etat etat){
         try {
             System.out.println(etat.getNom());
             return ResponseEntity.ok().body(etatRepo.save(etat));

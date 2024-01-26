@@ -14,6 +14,15 @@ import org.springframework.web.bind.annotation.*;
 public class TransmissionController {
     private final TransmissionDAO transmissionDAO;
     private final TransmissionRepo transmissionRepo;
+    @GetMapping("")
+    public ResponseEntity<?> getAll1(){
+        try{
+            return ResponseEntity.ok().body(transmissionDAO.getAll());
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
     @GetMapping("/get-all")
     public ResponseEntity<?> getAll(){
         try{
@@ -26,6 +35,15 @@ public class TransmissionController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Transmission transmission){
+        try {
+            return ResponseEntity.ok().body(transmissionRepo.save(transmission));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+    @PostMapping("")
+    public ResponseEntity<?> save1(@RequestBody Transmission transmission){
         try {
             return ResponseEntity.ok().body(transmissionRepo.save(transmission));
         } catch (Exception e) {

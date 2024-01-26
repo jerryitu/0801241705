@@ -51,7 +51,7 @@ public class Voiture {
     @JoinColumn(name = "id_etat", insertable = false, updatable = false)
     private Etat etat;
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idVoiture", insertable = false, updatable = false)
+    @JoinColumn(name = "id_voiture", insertable = false, updatable = false)
     private List<Photo> photo=new ArrayList<>();
     private Double kilometrage;
     private Double puissance;

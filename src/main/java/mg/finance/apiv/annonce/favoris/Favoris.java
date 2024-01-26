@@ -16,6 +16,7 @@ public class Favoris {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "id_user")
     private Long idUser;
     @Column(name = "id_annonce")
     private Integer idAnnonce;

@@ -18,6 +18,15 @@ import java.util.Optional;
 public class CouleurController {
     private final CouleurDAO couleurDAO;
     private final CouleurRepo couleurRepo;
+    @GetMapping("")
+    public ResponseEntity<?> getAll1(){
+        try{
+            return ResponseEntity.ok().body(couleurDAO.getAll());
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
     @GetMapping("/get-all")
     public ResponseEntity<?> getAll(){
         try{
@@ -30,6 +39,22 @@ public class CouleurController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Couleur couleur){
+        try {
+            if(couleur.getId()!=null && !couleur.getId().equals("")) {
+                Optional<Couleur> couleurOptional = couleurRepo.findById(Integer.valueOf(couleur.getId()));
+                Couleur couleurUpdate = couleurOptional.get();
+                couleurUpdate.setNom(couleur.getNom());
+                return ResponseEntity.ok().body(couleurRepo.save(couleurUpdate));
+            } else {
+                return ResponseEntity.ok().body(couleurRepo.save(couleur));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+    @PostMapping("")
+    public ResponseEntity<?> save1(@RequestBody Couleur couleur){
         try {
             if(couleur.getId()!=null && !couleur.getId().equals("")) {
                 Optional<Couleur> couleurOptional = couleurRepo.findById(Integer.valueOf(couleur.getId()));

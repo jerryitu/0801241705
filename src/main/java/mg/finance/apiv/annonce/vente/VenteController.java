@@ -34,7 +34,7 @@ public class VenteController {
         }
     }
 
-    @GetMapping("/get-by-vendeur")
+    @GetMapping("/by-vendeur")
     public ResponseEntity<?> getMine(){
         try{
             UtilisateurAPI userConnected = utilisateurAPIService.getActiveUser();
@@ -61,7 +61,7 @@ public class VenteController {
         }
     }
 
-    @GetMapping("/get-by-acheteur")
+    @GetMapping("/by-acheteur")
     public ResponseEntity<?> getByAcheteur(){
         try{
             UtilisateurAPI userConnected = utilisateurAPIService.getActiveUser();
@@ -74,6 +74,18 @@ public class VenteController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Vente vente){
+        try {
+            UtilisateurAPI userConnected = utilisateurAPIService.getActiveUser();
+            vente.setDateVente(LocalDate.now());
+            vente.setIdUserAcheteur(userConnected.getId());
+            return ResponseEntity.ok().body(venteRepo.save(vente));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+    @PostMapping("")
+    public ResponseEntity<?> save1(@RequestBody Vente vente){
         try {
             UtilisateurAPI userConnected = utilisateurAPIService.getActiveUser();
             vente.setDateVente(LocalDate.now());

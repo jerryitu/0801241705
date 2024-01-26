@@ -16,6 +16,16 @@ import java.util.Optional;
 public class CategorieController {
     private final CategorieDAO categorieDAO;
     private final CategorieRepo categorieRepo;
+
+    @GetMapping("")
+    public ResponseEntity<?> getAll1(){
+        try{
+            return ResponseEntity.ok().body(categorieDAO.getAll());
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
     @GetMapping("/get-all")
     public ResponseEntity<?> getAll(){
         try{
@@ -28,6 +38,22 @@ public class CategorieController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Categorie categorie){
+        try {
+            if(categorie.getId()!=null && !categorie.getId().equals("")) {
+                Optional<Categorie> categorieOptional = categorieRepo.findById(Integer.valueOf(categorie.getId()));
+                Categorie categorieUpdate = categorieOptional.get();
+                categorieUpdate.setNom(categorie.getNom());
+                return ResponseEntity.ok().body(categorieRepo.save(categorieUpdate));
+            } else {
+                return ResponseEntity.ok().body(categorieRepo.save(categorie));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+    @PostMapping("")
+    public ResponseEntity<?> save1(@RequestBody Categorie categorie){
         try {
             if(categorie.getId()!=null && !categorie.getId().equals("")) {
                 Optional<Categorie> categorieOptional = categorieRepo.findById(Integer.valueOf(categorie.getId()));

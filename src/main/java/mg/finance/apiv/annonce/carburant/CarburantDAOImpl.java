@@ -13,7 +13,7 @@ public class CarburantDAOImpl implements CarburantDAO {
     EntityManager entityManager;
 
     @Override
-    public List<Annonce> getAll() {
+    public List<Carburant> getAll() {
         String query = "Select a.* " +
                 "from Carburant a " ;
         return entityManager.createNativeQuery(query, Carburant.class).getResultList();

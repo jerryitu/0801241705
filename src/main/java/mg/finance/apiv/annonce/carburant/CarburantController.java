@@ -17,6 +17,16 @@ import java.util.Optional;
 public class CarburantController {
     private final CarburantDAO carburantDAO;
     private final CarburantRepo carburantRepo;
+
+    @GetMapping("")
+    public ResponseEntity<?> getAll1(){
+        try{
+            return ResponseEntity.ok().body(carburantDAO.getAll());
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
     @GetMapping("/get-all")
     public ResponseEntity<?> getAll(){
         try{
@@ -29,6 +39,22 @@ public class CarburantController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Carburant carburant){
+        try {
+            if(carburant.getId()!=null && !carburant.getId().equals("")) {
+                Optional<Carburant> carburantOptional = carburantRepo.findById(Integer.valueOf(carburant.getId()));
+                Carburant carburantUpdate = carburantOptional.get();
+                carburantUpdate.setNom(carburant.getNom());
+                return ResponseEntity.ok().body(carburantRepo.save(carburantUpdate));
+            } else {
+                return ResponseEntity.ok().body(carburantRepo.save(carburant));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+    @PostMapping("")
+    public ResponseEntity<?> save1(@RequestBody Carburant carburant){
         try {
             if(carburant.getId()!=null && !carburant.getId().equals("")) {
                 Optional<Carburant> carburantOptional = carburantRepo.findById(Integer.valueOf(carburant.getId()));

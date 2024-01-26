@@ -29,17 +29,19 @@ public class UtilisateurAPI {
     @Transient
     private String passwordFront;
     @JsonIgnore
+    @Column(name = "generated_password")
     private String generatedPassword;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     private RoleAPI role;
-
+    @Column(name = "is_active")
     private Boolean isActive;
 
     @Column(name = "date_creation", updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDateTime dateCreation;
+    @Column(name = "tentative_connexion")
     private Integer tentativeConnexion = 0;
     @Transient
     private String roleFront;

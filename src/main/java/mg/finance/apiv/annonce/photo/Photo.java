@@ -17,6 +17,7 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "id_voiture")
     private Integer idVoiture;
     private String encoded;
 }

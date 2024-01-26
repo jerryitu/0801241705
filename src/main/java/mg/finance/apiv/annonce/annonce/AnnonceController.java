@@ -31,6 +31,17 @@ public class AnnonceController {
     private final VoitureRepo voitureRepo;
     private final UtilisateurAPIService utilisateurAPIService;
     private final PhotoRepo photoRepo;
+    @GetMapping("")
+    public ResponseEntity<?> getAll1(){
+        try{
+            return ResponseEntity.ok().body(annonceRepo.getAllRepo().stream()
+                    .distinct()
+                    .collect(Collectors.toList()));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
     @GetMapping("/get-all")
     public ResponseEntity<?> getAll(){
         try{
@@ -63,6 +74,53 @@ public class AnnonceController {
     }
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Annonce annonce){
+        Voiture voiture = annonce.getVoiture();
+        if(annonce.getId()!=null && !annonce.getId().equals("")){
+            Optional<Annonce> annonceOptional = annonceRepo.findById(Integer.valueOf(annonce.getId()));
+            Annonce annonceUpdate = annonceOptional.get();
+            annonceUpdate.setPrix(annonce.getPrix());
+            annonceRepo.save(annonceUpdate);
+            Optional<Voiture> voitureOptional = voitureRepo.findById(Integer.valueOf(annonceUpdate.getIdVoiture()));
+            Voiture voitureUpdate = voitureOptional.get();
+            voitureUpdate.setAnnee(annonce.getVoiture().getAnnee());
+            voitureUpdate.setDescription(annonce.getVoiture().getDescription());
+            voitureUpdate.setNom(annonce.getVoiture().getNom());
+            voitureUpdate.setKilometrage(annonce.getVoiture().getKilometrage());
+            voitureUpdate.setPortes(annonce.getVoiture().getPortes());
+            voitureUpdate.setSieges(annonce.getVoiture().getSieges());
+            voitureUpdate.setPuissance(annonce.getVoiture().getPuissance());
+            voitureUpdate.setIdCategorie(annonce.getVoiture().getIdCategorie());
+            voitureUpdate.setIdMarque(annonce.getVoiture().getIdMarque());
+            voitureUpdate.setIdModele(annonce.getVoiture().getIdModele());
+            voitureUpdate.setIdEtat(annonce.getVoiture().getIdEtat());
+            voitureUpdate.setIdTransmission(annonce.getVoiture().getIdTransmission());
+            voitureRepo.save(voitureUpdate);
+            return ResponseEntity.ok().body(annonceUpdate);
+        }else if(voiture!=null) {
+            try {
+                UtilisateurAPI userConnected = utilisateurAPIService.getActiveUser();
+                annonce.setIdVoiture(voitureRepo.save(voiture).getId());
+                annonce.setDateAnnonce(LocalDate.now());
+                annonce.setIdUser(userConnected.getId());
+                annonce.setEtatValidation("0");
+                annonce.setEtatVendu("0");
+                System.out.println(annonce.getVoiture().getPhoto().size());
+                annonce.getVoiture().getPhoto().stream()
+                        .forEach(s -> {
+                            s.setIdVoiture(annonce.getIdVoiture());
+                            photoRepo.save(s);
+                        });
+                return ResponseEntity.ok().body(annonceRepo.save(annonce));
+            } catch (Exception e) {
+                voitureRepo.delete(voiture);
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("Erreur de véhicule"));
+    }
+    @PostMapping("")
+    public ResponseEntity<?> save1(@RequestBody Annonce annonce){
         Voiture voiture = annonce.getVoiture();
         if(annonce.getId()!=null && !annonce.getId().equals("")){
             Optional<Annonce> annonceOptional = annonceRepo.findById(Integer.valueOf(annonce.getId()));
