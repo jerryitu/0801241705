@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,5 +19,5 @@ public class UserVu {
     @Id
     private String id;
     private Integer idUser;
-    private LocalDate dateVue;
+    private LocalDateTime dateVue;
 }

@@ -36,6 +36,16 @@ public class CarburantController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
         }
     }
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") String idToDelete){
+        try{
+            carburantRepo.deleteById(Integer.valueOf(idToDelete));
+            return ResponseEntity.ok().body(idToDelete+" deleted");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Carburant carburant){

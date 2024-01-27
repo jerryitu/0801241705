@@ -1,5 +1,6 @@
 package mg.finance.apiv.message.sequence.dao;
 
+import lombok.AllArgsConstructor;
 import mg.finance.apiv.message.sequence.exception.SequenceException;
 import mg.finance.apiv.message.sequence.model.SequenceId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +11,15 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+
 @Repository
+@AllArgsConstructor
 public class SequenceDaoImpl implements SequenceDao {
 
-	@Autowired
-	private MongoOperations mongoOperation;
+	private final MongoOperations mongoOperation;
 
 	@Override
-	public long getNextSequenceId(String key) throws SequenceException {
+	public long getNextSequenceId(String key) throws Exception {
 
 		Query query = new Query(Criteria.where("_id").is(key));
 
@@ -30,11 +32,10 @@ public class SequenceDaoImpl implements SequenceDao {
 		SequenceId seqId = mongoOperation.findAndModify(query, update, options, SequenceId.class);
 
 		if (seqId == null) {
-			throw new SequenceException("Unable to get sequence id for key : " + key);
+			throw new Exception("Unable to get sequence id for key : " + key);
 		}
 
 		return seqId.getSeq();
 
 	}
-
 }

@@ -27,7 +27,16 @@ public class FavorisController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
         }
     }
-
+    @GetMapping("")
+    public ResponseEntity<?> getMine1(){
+        try{
+            UtilisateurAPI userConnected = utilisateurAPIService.getActiveUser();
+            return ResponseEntity.ok().body(favorisDAO.getMine(userConnected.getId()));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
     @GetMapping("/save/{idAnnonce}")
     public ResponseEntity<?> save(@PathVariable("idAnnonce") String idAnnonce){
         try {

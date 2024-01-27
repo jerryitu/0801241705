@@ -110,12 +110,11 @@ public class UtilisateurAPIServiceImpl implements UtilisateurAPIService, UserDet
     @Override
     public UtilisateurAPI saveUtilisateur(UtilisateurAPI utilisateur) throws Exception {
         log.info("Enregistrement d'un nouvel utilisateur API {} dans la base" , utilisateur.getUsername());
-        UtilisateurAPI activeUser = this.getActiveUser();
+
         if (utilisateur.getPasswordFront() != null) utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPasswordFront()));
         //Mot de passe aléatoire
  //       String generatedPassword = "123456789";
 //        String generatedPassword = RandomPassword.getAlphaNumericString(10);
-        log.info("Password {}", utilisateur.getPasswordFront());
         //utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
 
         utilisateur.setDateCreation(LocalDateTime.now());

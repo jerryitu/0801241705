@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,10 +18,10 @@ import java.util.List;
 @Document(collection = "conversation")
 public class Conversation {
     @Transient
-    public static final String SEQUENCE_NAME = "conversation_sequence";
+    public static final String SEQUENCE_NAME = "conversation";
     @Id
     private String id;
     private List<Integer> participants;
     private List<Message> messages;
-    private LocalDate dateCreation;
+    private LocalDateTime dateCreation;
 }
