@@ -25,7 +25,7 @@ public class VenteDAOImpl implements VenteDAO {
         String query = "Select a.* " +
                 "from Vente a " +
                 "where a.id_annonce in "
-                +"(Select id from Annonce where idUser="+ FonctionUtils.toStringBase(idUser.toString())+")"  ;
+                +"(Select id from Annonce where id_user="+ FonctionUtils.toStringBase(idUser.toString())+")"  ;
         return entityManager.createNativeQuery(query, Vente.class).getResultList();
     }
 

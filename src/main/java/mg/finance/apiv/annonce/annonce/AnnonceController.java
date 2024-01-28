@@ -53,6 +53,17 @@ public class AnnonceController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
         }
     }
+    @GetMapping("/valide")
+    public ResponseEntity<?> getAllValide(){
+        try{
+            return ResponseEntity.ok().body(annonceRepo.getAllValidRepo().stream()
+                    .distinct()
+                    .collect(Collectors.toList()));
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
     @GetMapping("/mine")
     public ResponseEntity<?> getMine(){
         try{
@@ -63,7 +74,7 @@ public class AnnonceController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
         }
     }
-    @PostMapping("/get-by-filter")
+    @PostMapping("/by-filter")
     public ResponseEntity<?> getByFiltre(@RequestBody Annonce annonce){
         try{
             return ResponseEntity.ok().body(annonceService.getByFilter(annonce));

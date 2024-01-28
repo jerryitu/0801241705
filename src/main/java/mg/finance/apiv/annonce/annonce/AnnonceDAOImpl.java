@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class AnnonceDAOImpl implements AnnonceDAO {
@@ -49,9 +50,13 @@ public class AnnonceDAOImpl implements AnnonceDAO {
     }
 
     @Override
-    public List<StatAnnonceParCategorie> getStatParCategorie() {
-        String query = "Select a.voiture.categorie, count(a) as nombre " +
-                "from Annonce a " ;
-        return entityManager.createNativeQuery(query, StatAnnonceParCategorie.class).getResultList();
+    public List<Object> getStatParCategorie() {
+        String query = "Select v.id_categorie, c.nom as categorie, count(a.id) as nombre " +
+                "from Annonce a " +
+                " join voiture v on a.id_voiture=v.id " +
+                " join categorie c on c.id=v.id_categorie " +
+                " where " +
+                " group by v.id_categorie, c.nom " ;
+        return entityManager.createNativeQuery(query).getResultList();
     }
 }

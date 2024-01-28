@@ -12,8 +12,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
+@Entity
+@Table(name="v_stat_categorie_annonce")
 public class StatAnnonceParCategorie {
-    private Integer idMarque;
-    private Categorie categorie;
+    @Id
+    private Integer id;
+    private String categorie;
     private Integer nombre;
 }

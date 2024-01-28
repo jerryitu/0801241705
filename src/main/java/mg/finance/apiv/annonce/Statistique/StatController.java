@@ -15,7 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,11 +28,34 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class StatController {
-    private final AnnonceDAO annonceService;
-    @GetMapping("")
+    private final StatAnnonceParCategorieRepo statAnnonceParCategorieRepo;
+    private final StatAnnonceParMarqueRepo statAnnonceParMarqueRepo;
+    private final StatVenteParMoisRepo statVenteParMoisRepo;
+    @GetMapping("/annonce-par-categorie")
     public ResponseEntity<?> getAll1(){
         try{
-            return ResponseEntity.ok().body(annonceService.getStatParCategorie());
+            List<StatAnnonceParCategorie> stat = statAnnonceParCategorieRepo.findAll();
+            return ResponseEntity.ok().body(stat);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+    @GetMapping("/annonce-par-marque")
+    public ResponseEntity<?> getAnnonceMarque(){
+        try{
+            List<StatAnnonceParMarque> stat = statAnnonceParMarqueRepo.findAll();
+            return ResponseEntity.ok().body(stat);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
+    @GetMapping("/vente-par-mois")
+    public ResponseEntity<?> getVenteParMois(){
+        try{
+            List<StatVenteParMois> stat = statVenteParMoisRepo.findAll();
+            return ResponseEntity.ok().body(stat);
         }catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
