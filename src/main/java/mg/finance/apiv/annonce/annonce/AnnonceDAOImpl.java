@@ -1,5 +1,6 @@
 package mg.finance.apiv.annonce.annonce;
 
+import mg.finance.apiv.annonce.Statistique.StatAnnonceParCategorie;
 import mg.finance.utils.FonctionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -45,5 +46,12 @@ public class AnnonceDAOImpl implements AnnonceDAO {
                 ;
         System.out.println(query);
         return entityManager.createNativeQuery(query, Annonce.class).getResultList();
+    }
+
+    @Override
+    public List<StatAnnonceParCategorie> getStatParCategorie() {
+        String query = "Select a.voiture.categorie, count(a) as nombre " +
+                "from Annonce a " ;
+        return entityManager.createNativeQuery(query, StatAnnonceParCategorie.class).getResultList();
     }
 }
