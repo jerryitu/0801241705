@@ -31,9 +31,10 @@ public class AnnonceDAOImpl implements AnnonceDAO {
     @Override
     public String uploadFile(String encoded, String fileName) throws IOException {
         byte[] decodedBytes = Base64.getDecoder().decode(encoded.trim().substring("data:image/jpeg;base64,".length()));
-
+       // gs://project-050224.appspot.com/images
         BlobId blobId = BlobId.of("project-050224.appspot.com", fileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("image/jpeg").build();
+
         Credentials credentials = GoogleCredentials.fromStream(new ClassPathResource("project-050224-firebase-adminsdk-2yt78-94f1b1ac6a.json").getInputStream());
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
         storage.create(blobInfo, decodedBytes);

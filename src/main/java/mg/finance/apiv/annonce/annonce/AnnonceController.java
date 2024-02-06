@@ -122,7 +122,7 @@ public class AnnonceController {
                             s.setIdVoiture(annonce.getIdVoiture());
                             photoRepo.save(s);
                             try {
-                                annonceService.uploadFile(s.getEncoded(),s.getId().toString()+".jpg");
+                                annonceService.uploadFile(s.getEncoded(),"images/"+s.getIdVoiture()+"/"+s.getId().toString()+".jpg");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -145,7 +145,7 @@ public class AnnonceController {
                     //s.setIdVoiture(annonce.getIdVoiture());
 
                     try {
-                        annonceService.uploadFile(s.getEncoded(),"testVoiture.jpg");
+                        annonceService.uploadFile(s.getEncoded(),"images/"+s.getIdVoiture()+"/"+s.getId().toString()+".jpg");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -190,7 +190,7 @@ public class AnnonceController {
                             s.setIdVoiture(annonce.getIdVoiture());
                             photoRepo.save(s);
                             try {
-                                annonceService.uploadFile(s.getEncoded(),s.getId().toString()+".jpg");
+                                annonceService.uploadFile(s.getEncoded(),"images/"+s.getIdVoiture()+"/"+s.getId().toString()+".jpg");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
