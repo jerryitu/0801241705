@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -120,6 +121,11 @@ public class AnnonceController {
                         .forEach(s -> {
                             s.setIdVoiture(annonce.getIdVoiture());
                             photoRepo.save(s);
+                            try {
+                                annonceService.uploadFile(s.getEncoded(),s.getId().toString()+".jpg");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         });
                 return ResponseEntity.ok().body(annonceRepo.save(annonce));
             } catch (Exception e) {
@@ -129,6 +135,23 @@ public class AnnonceController {
             }
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("Erreur de véhicule"));
+    }
+    @PostMapping("/save-image")
+    public ResponseEntity<?> saveImage(@RequestBody Annonce annonce){
+
+        System.out.println(annonce.getVoiture().getPhoto().size());
+        annonce.getVoiture().getPhoto().stream()
+                .forEach(s -> {
+                    //s.setIdVoiture(annonce.getIdVoiture());
+
+                    try {
+                        annonceService.uploadFile(s.getEncoded(),"testVoiture.jpg");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+        return ResponseEntity.ok().body("annonceRepo.save(annonce)");
+
     }
     @PostMapping("")
     public ResponseEntity<?> save1(@RequestBody Annonce annonce){
@@ -162,14 +185,22 @@ public class AnnonceController {
                 annonce.setIdUser(userConnected.getId());
                 annonce.setEtatValidation("0");
                 annonce.setEtatVendu("0");
-                System.out.println(annonce.getVoiture().getPhoto().size());
                 annonce.getVoiture().getPhoto().stream()
                         .forEach(s -> {
                             s.setIdVoiture(annonce.getIdVoiture());
                             photoRepo.save(s);
+                            try {
+                                annonceService.uploadFile(s.getEncoded(),s.getId().toString()+".jpg");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         });
                 return ResponseEntity.ok().body(annonceRepo.save(annonce));
             } catch (Exception e) {
+                annonce.getVoiture().getPhoto().stream()
+                        .forEach(s -> {
+                            photoRepo.delete(s);
+                        });
                 voitureRepo.delete(voiture);
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
