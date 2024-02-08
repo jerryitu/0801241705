@@ -24,9 +24,20 @@ import java.net.URI;
 public class UtilisateurAPIController {
 
     private final UtilisateurAPIService utilisateurService;
+    private final UtilisateurAPIRepo utilisateurAPIRepo;
 
     @Autowired
     private JwtGenerator jwtGenerator;
+
+    @GetMapping("")
+    public ResponseEntity<?> getAll(){
+        try{
+            return ResponseEntity.ok().body(utilisateurAPIRepo.findAll());
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
+        }
+    }
 
     @PostMapping("/save")
     public ResponseEntity<?> saveUtilisateur(@RequestBody UtilisateurAPI utilisateur){
