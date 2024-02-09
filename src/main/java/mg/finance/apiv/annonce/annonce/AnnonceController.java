@@ -3,6 +3,7 @@ package mg.finance.apiv.annonce.annonce;
 import lombok.RequiredArgsConstructor;
 import mg.finance.apiv.annonce.AnnonceService;
 import mg.finance.apiv.annonce.carburant.Carburant;
+import mg.finance.apiv.annonce.photo.Photo;
 import mg.finance.apiv.annonce.photo.PhotoRepo;
 import mg.finance.apiv.annonce.voiture.Voiture;
 import mg.finance.apiv.annonce.voiture.VoitureRepo;
@@ -11,8 +12,11 @@ import mg.finance.apiv.security.utilisateur.entity.UtilisateurAPI;
 import mg.finance.utils.ErrorResponse;
 import mg.finance.utils.FonctionUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -116,13 +120,12 @@ public class AnnonceController {
                 annonce.setIdUser(userConnected.getId());
                 annonce.setEtatValidation("0");
                 annonce.setEtatVendu("0");
-                System.out.println(annonce.getVoiture().getPhoto().size());
                 annonce.getVoiture().getPhoto().stream()
                         .forEach(s -> {
                             s.setIdVoiture(annonce.getIdVoiture());
                             photoRepo.save(s);
                             try {
-                                annonceService.uploadFile(s.getEncoded(),"images/"+s.getIdVoiture()+"/"+s.getId().toString()+".jpg");
+                                annonceService.uploadFile(s.getFile(), s.getEncoded(),"images/"+s.getIdVoiture()+"/"+s.getId().toString()+".jpg");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -137,19 +140,20 @@ public class AnnonceController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("Erreur de véhicule"));
     }
     @PostMapping("/save-image")
-    public ResponseEntity<?> saveImage(@RequestBody Annonce annonce){
+    public ResponseEntity<?> saveImage(@RequestParam(value = "file",required = false) MultipartFile file,
+                                       @RequestParam(value = "idVoiture", required = false) String idVoiture){
+        Photo photo = new Photo();
+        try {
+            photo.setIdVoiture(Integer.valueOf(idVoiture));
+            photo.setFile(file);
+            byte[] fileBytes = file.getBytes();
+            photo.setEncoded("data:image/jpeg;base64,"+Base64Utils.encodeToString(fileBytes));
+            photoRepo.save(photo);
+            annonceService.uploadFile(photo.getFile(), photo.getEncoded(),"images/"+photo.getIdVoiture()+"/"+photo.getId().toString()+".jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        System.out.println(annonce.getVoiture().getPhoto().size());
-        annonce.getVoiture().getPhoto().stream()
-                .forEach(s -> {
-                    //s.setIdVoiture(annonce.getIdVoiture());
-
-                    try {
-                        annonceService.uploadFile(s.getEncoded(),"images/"+s.getIdVoiture()+"/"+s.getId().toString()+".jpg");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
         return ResponseEntity.ok().body("annonceRepo.save(annonce)");
 
     }
@@ -190,7 +194,7 @@ public class AnnonceController {
                             s.setIdVoiture(annonce.getIdVoiture());
                             photoRepo.save(s);
                             try {
-                                annonceService.uploadFile(s.getEncoded(),"images/"+s.getIdVoiture()+"/"+s.getId().toString()+".jpg");
+                                annonceService.uploadFile(s.getFile(), s.getEncoded(),"images/"+s.getIdVoiture()+"/"+s.getId().toString()+".jpg");
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

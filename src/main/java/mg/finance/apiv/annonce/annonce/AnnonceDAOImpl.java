@@ -2,26 +2,26 @@ package mg.finance.apiv.annonce.annonce;
 
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.*;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.StorageClient;
-import lombok.extern.java.Log;
-import mg.finance.apiv.annonce.Statistique.StatAnnonceParCategorie;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import mg.finance.utils.FonctionUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Base64Utils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Base64;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class AnnonceDAOImpl implements AnnonceDAO {
@@ -29,16 +29,23 @@ public class AnnonceDAOImpl implements AnnonceDAO {
     EntityManager entityManager;
 
     @Override
-    public String uploadFile(String encoded, String fileName) throws IOException {
-        byte[] decodedBytes = Base64.getDecoder().decode(encoded.trim().substring("data:image/jpeg;base64,".length()));
-       // gs://project-050224.appspot.com/images
+    public String uploadFile(MultipartFile file, String encoded, String fileName) throws IOException {
         BlobId blobId = BlobId.of("project-050224.appspot.com", fileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("image/jpeg").build();
 
         Credentials credentials = GoogleCredentials.fromStream(new ClassPathResource("project-050224-firebase-adminsdk-2yt78-94f1b1ac6a.json").getInputStream());
         Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
-        storage.create(blobInfo, decodedBytes);
 
+        if(encoded!=null&&!encoded.equals("")){
+            System.out.println("type base64");
+            System.out.println(encoded);
+            //byte[] decodedBytes = Base64.getDecoder().decode(encoded);
+            byte[] decodedBytes = Base64.getDecoder().decode(encoded.trim().substring("data:image/jpeg;base64,".length()));
+            storage.create(blobInfo, decodedBytes);
+        } else if(file!=null){
+            System.out.println("type file");
+            storage.create(blobInfo, file.getBytes());
+        }
         return String.format("DOWNLOAD_URL", URLEncoder.encode(fileName, StandardCharsets.UTF_8));
     }
 
@@ -87,4 +94,5 @@ public class AnnonceDAOImpl implements AnnonceDAO {
                 " group by v.id_categorie, c.nom " ;
         return entityManager.createNativeQuery(query).getResultList();
     }
+
 }

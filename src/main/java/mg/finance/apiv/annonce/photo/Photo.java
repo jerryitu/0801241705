@@ -1,10 +1,9 @@
 package mg.finance.apiv.annonce.photo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mg.finance.apiv.annonce.marque.Marque;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -20,4 +19,6 @@ public class Photo {
     @Column(name = "id_voiture")
     private Integer idVoiture;
     private String encoded;
+    @Transient
+    private MultipartFile file;
 }
